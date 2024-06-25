@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-ceph
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+spec:
+  repo: https://charts.rook.io/release
+  chart: rook-ceph
+  version: 1.15.0
+  targetNamespace: rook-ceph 
+  valuesContent: |
+    monitoring:
+      enabled: true 
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rook-ceph-cluster
+  namespace: rook-ceph
+spec:
+  repo: https://charts.rook.io/release
+  chart: rook-ceph-cluster
+  version: 1.15.0
+  targetNamespace: rook-ceph 
+  valuesContent: |
+    cephFileSystemVolumeSnapshotClass: rook-ceph.cephfs.csi.ceph.com
+    monitoring:
+      enabled: true 
+      createPrometheusRules: true
